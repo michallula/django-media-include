@@ -1,0 +1,8 @@
+{% extends "media_include/tests/templatetags/base_test.html" %}
+{% load media_include_tags %}
+
+{% block head_before %}{% include_js "head_before.js" %}{% endblock %}
+
+{% block head_after %}{% include_js "head_after.js" %}{% endblock %}
+
+{% block body %}{% include_js "body.js" %}{% endblock %}

@@ -1,0 +1,19 @@
+{% load media_include_tags %}
+
+{% media_include %}
+<html>
+	<head>
+		<div id="head_before">
+		{% block head_before %}{% endblock %}
+		</div>	
+		{% inject_media %}
+		<div id="head_after">
+		{% block head_after %}{% endblock %}
+		</div>		
+	</head>
+	<body>
+		{% block body %}
+		{% endblock %}
+	</body>
+</html>
+{% endmedia_include %}

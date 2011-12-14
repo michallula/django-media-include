@@ -1,0 +1,7 @@
+{% extends "media_include/tests/templatetags/base_result.html" %}
+
+{% block inject_media %}
+	<link href="head_before.css" type="text/css" media="all" rel="stylesheet"/>
+	<link href="head_after.css" type="text/css" media="all" rel="stylesheet"/>
+	<link href="body.css" type="text/css" media="all" rel="stylesheet"/>
+{% endblock %}
