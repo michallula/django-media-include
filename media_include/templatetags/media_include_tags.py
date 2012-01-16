@@ -109,7 +109,7 @@ class InjectStylesheetNode(InjectMediaNode):
     tag_name = u'inject_stylesheet'
     
     def render(self, context):
-        return super(InjectStylesheetNode, self).render(context).render_stylsheet()
+        return super(InjectStylesheetNode, self).render(context).render_stylesheet()
 
 #===============================================================================
 # inclusion nodes
