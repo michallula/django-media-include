@@ -1,1 +1,27 @@
 {% extends "media_include/tests/templatetags/base_test.html" %}
+
+{% load media_include_tags %}
+
+{% block head_before %}
+{% include_stylesheet %}
+<style type="text/css">
+    H1.before {border-width: 1; border: solid; text-align: center}
+</style>
+{% endinclude_stylesheet %}
+{% endblock %}
+
+{% block head_after %}
+{% include_stylesheet %}
+<style type="text/css">
+    H1.after {border-width: 1; border: solid; text-align: center}
+</style>
+{% endinclude_stylesheet %}
+{% endblock %}
+
+{% block body %}
+{% include_stylesheet %}
+<style type="text/css">
+    H1.body {border-width: 1; border: solid; text-align: center}
+</style>
+{% endinclude_stylesheet %}
+{% endblock %}

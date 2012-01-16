@@ -41,7 +41,7 @@ class IncludeMediaTestCase(BaseTestCase):
 class IncludeScriptTestCase(BaseTestCase):
     
     template = 'media_include/tests/templatetags/include_script.html'
-    result_template = 'media_include/tests/templatetags/include_media_result.html'
+    result_template = 'media_include/tests/templatetags/include_script_result.html'
     
 class IncludeStylesheetTestCase(BaseTestCase):
     

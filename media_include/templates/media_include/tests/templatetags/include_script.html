@@ -1,1 +1,33 @@
 {% extends "media_include/tests/templatetags/base_test.html" %}
+
+{% load media_include_tags %}
+
+{% block head_before %}
+{% include_script %}
+<script type="text/javascript">
+	function head_before () {
+		return false;
+	}
+</script>
+{% endinclude_script %}
+{% endblock %}
+
+{% block head_after %}
+{% include_script %}
+<script type="text/javascript">
+	function head_after () {
+		return false;
+	}
+</script>
+{% endinclude_script %}
+{% endblock %}
+
+{% block body %}
+{% include_script %}
+<script type="text/javascript">
+	function body () {
+		return false;
+	}
+</script>
+{% endinclude_script %}
+{% endblock %}

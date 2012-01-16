@@ -3,12 +3,15 @@
 from django import template
 from media_include.settings import MEDIA_CLASS, MEDIA_CONTEXT_KEY
 from django.utils.encoding import smart_str
+from media_include.media import Media
 
 register = template.Library()
 
 #===============================================================================
 # helpers
 #===============================================================================
+
+MEDIA_CLASS = Media
 
 def parse(parser, *bits):
     args = []
@@ -72,7 +75,7 @@ class BaseNode(template.Node):
 
 class InjectMediaNode(BaseNode):
     
-    tag_name = 'inject_media'
+    tag_name = u'inject_media'
     
     def get_media(self, context):
         return self.get_media_context(context).media
@@ -82,28 +85,28 @@ class InjectMediaNode(BaseNode):
     
 class InjectJSNode(InjectMediaNode):
     
-    tag_name = 'inject_js'
+    tag_name = u'inject_js'
     
     def render(self, context):
         return super(InjectJSNode, self).render(context).render_js()
 
 class InjectCSSNode(InjectMediaNode):
     
-    tag_name = 'inject_css'
+    tag_name = u'inject_css'
     
     def render(self, context):
         return super(InjectCSSNode, self).render(context).render_css()
     
 class InjectScriptNode(InjectMediaNode):
     
-    tag_name = 'inject_script'
+    tag_name = u'inject_script'
     
     def render(self, context):
         return super(InjectScriptNode, self).render(context).render_script()
     
 class InjectStylesheetNode(InjectMediaNode):
     
-    tag_name = 'inject_stylesheet'
+    tag_name = u'inject_stylesheet'
     
     def render(self, context):
         return super(InjectStylesheetNode, self).render(context).render_stylsheet()
@@ -122,7 +125,7 @@ class BaseIncludeNode(BaseNode):
 
 class IncludeJSNode(BaseIncludeNode):
     
-    tag_name = 'include_js'
+    tag_name = u'include_js'
     
     def get_media(self, context):
         media = super(IncludeJSNode, self).get_media(context)
@@ -140,19 +143,51 @@ class IncludeCSSNode(BaseIncludeNode):
         media.add_css(kwargs)
         return media
     
-    tag_name = 'include_css'
+    tag_name = u'include_css'
 
 class IncludeMediaNode(BaseIncludeNode):
     
-    tag_name = 'include_media'
-
-class IncludeScriptNode(BaseIncludeNode):
+    tag_name = u'include_media'
     
-    tag_name = 'include_script'
-
-class IncludeStylesheetNode(BaseIncludeNode):
+class ComplexIncludeNode(BaseIncludeNode):
     
-    tag_name = 'include_stylesheet'
+    tag_name = None
+    end_tag_name = None
+    
+    @classmethod
+    def parse(cls, parser, token):        
+        bits = token.split_contents()
+        assert bits[0] == cls.tag_name
+        args, kwargs = parse(parser, *bits[1:])
+        nodelist = parser.parse(cls.end_tag_name)
+        parser.delete_first_token()
+        return cls(parser, nodelist, *args, **kwargs) 
+    
+    def __init__(self, parser, nodelist, *args, **kwargs):
+        self.nodelist = nodelist
+        super(ComplexIncludeNode, self).__init__(parser, *args, **kwargs)
+    
+class IncludeScriptNode(ComplexIncludeNode):
+    
+    tag_name = u'include_script'    
+    end_tag_name = u'end{0}'.format(tag_name)
+    
+    def get_media(self, context):
+        media = super(IncludeScriptNode, self).get_media(context)
+        script = self.nodelist.render(context)
+        media.add_script([script])
+        return media
+
+class IncludeStylesheetNode(ComplexIncludeNode):
+    
+    tag_name = u'include_stylesheet'
+    end_tag_name = u'end{0}'.format(tag_name)
+    
+    def get_media(self, context):
+        media = super(IncludeStylesheetNode, self).get_media(context)
+        stylesheet = self.nodelist.render(context)
+        media.add_stylesheet([stylesheet])
+        return media
 
 #===============================================================================
 # media include node

@@ -1,1 +1,19 @@
 {% extends "media_include/tests/templatetags/base_result.html" %}
+
+{% block inject_media %}
+<script type="text/javascript">
+	function head_before () {
+		return false;
+	}
+</script>
+<script type="text/javascript">
+	function head_after () {
+		return false;
+	}
+</script>
+<script type="text/javascript">
+	function body () {
+		return false;
+	}
+</script>
+{% endblock %}

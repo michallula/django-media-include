@@ -18,6 +18,8 @@ class Media(django_media):
 
         self._css = {}
         self._js = []
+        self._script = []
+        self._stylesheet = []
 
         for name in self.MEDIA_TYPES:
             getattr(self, 'add_' + name)(media_attrs.get(name, None))
@@ -29,10 +31,10 @@ class Media(django_media):
         return mark_safe(u'\n'.join(chain(*[getattr(self, 'render_' + name)() for name in self.MEDIA_TYPES])))
         
     def render_script(self):
-        pass
+        return self._script[:]
     
     def render_stylesheet(self):
-        pass
+        return self._stylesheet[:]
 
     def __getitem__(self, name):
         "Returns a Media object that only contains media of the given type"
@@ -40,11 +42,15 @@ class Media(django_media):
             return self.__class__(**{str(name): getattr(self, '_' + name)})
         raise KeyError('Unknown media type "%s"' % name)
                         
-    def add_stylesheet(self, *args, **kwargs):
-        pass
+    def add_stylesheet(self, data, *args, **kwargs):
+        if data:
+            for stylesheet in data:
+                self._stylesheet.append(stylesheet)
     
-    def add_script(self, *args, **kwargs):
-        pass
+    def add_script(self, data, *args, **kwargs):
+        if data:
+            for script in data:
+                self._script.append(script)
 
     def __add__(self, other):
         combined = self.__class__()

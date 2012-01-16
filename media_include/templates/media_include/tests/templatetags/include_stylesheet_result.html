@@ -1,1 +1,13 @@
 {% extends "media_include/tests/templatetags/base_result.html" %}
+
+{% block inject_media %}
+<style type="text/css">
+    H1.before {border-width: 1; border: solid; text-align: center}
+</style>
+<style type="text/css">
+    H1.after {border-width: 1; border: solid; text-align: center}
+</style>
+<style type="text/css">
+    H1.body {border-width: 1; border: solid; text-align: center}
+</style>
+{% endblock %}
